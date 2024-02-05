@@ -11,4 +11,5 @@ def say_hello(request):
 
     return render(request, "hello.html", {'name':'Stylianos '})
 
-# Create your views here.
+# Create a new view function called User_Profile to return a json response with the data; name, email and phone number
+# Register the view function on a path called profile.
