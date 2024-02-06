@@ -1,15 +1,29 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import JsonResponse
+from django.views import View
+from .models import Query
 
-def calculate():
-    x = 1
-    y = 2
-    return x
+def filter_queries(request, query_id):
+    query = {
+        "query_id": query_id,
+        "title": "The Beginning of the End",
+        "description": "The end is nigh!",
+        "status": "SUBMITTED",
+        "submitted_by": "Valar Morgulis",  
+    }
+    return JsonResponse(query)
 
 def say_hello(request):
-    x = calculate()
+    all_queries = Query.objects.all()  # Correct model name
+    context = {'queries': filter_queries}
+    return render(request, "hello.html", context)
 
-    return render(request, "hello.html", {'name':'Stylianos '})
+class QueryView(View):
+    queries = [
+            {"id": 1, "title": "Adama refuses Valentine shots"},
+            {"id": 2, "title": "The Beginning of the End: Valentine's Day Massacre"},
+            {"id": 3, "title": "The End of the Beginning: Your eyes go see shege!"},
+        ]
 
-# Create a new view function called User_Profile to return a json response with the data; name, email and phone number
-# Register the view function on a path called profile.
+    def get(self, request):
+        return JsonResponse({"result": self.queries})
