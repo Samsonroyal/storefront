@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import IMUser
 
 # Create your models here.
 class ClassSchedule(models.Model):
@@ -16,21 +17,22 @@ class ClassSchedule(models.Model):
 
 class ClassAttendance(models.Model):
     class_schedule = models.ForeignKey(ClassSchedule, on_delete=models.CASCADE)
-    attendee = models.ForeignKey('users.IMUser', on_delete=models.CASCADE)
+    attendee = models.ForeignKey(IMUser, on_delete=models.CASCADE, related_name='attendances')
+    author = models.ForeignKey(IMUser, on_delete=models.CASCADE, related_name='authored_attendances')
     is_present = models.BooleanField(default=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey('users.IMUser', on_delete=models.CASCADE)
+    
 
 class Query(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
-    submitted_by = models.ForeignKey('users.IMUser', on_delete=models.CASCADE)
     assigned_to = models.ForeignKey('users.IMUser', on_delete=models.CASCADE, related_name='assigned_to')
     resolution_status = models.CharField(max_length=20, default='OPEN')
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    author = models.ForeignKey('users.IMUser', on_delete=models.CASCADE)
+    author = models.ForeignKey(IMUser, on_delete=models.CASCADE, related_name='authored_queries')
+    submitted_by = models.ForeignKey(IMUser, on_delete=models.CASCADE, related_name='submitted_queries')
 
 
 class QueryComment(models.Model):
