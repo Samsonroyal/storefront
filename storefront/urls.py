@@ -22,4 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('playground/', include("playground.urls")),
     path("__debug__/", include("debug_toolbar.urls")),
+    path('store/', include("store.urls")),
+    path('tags/', include("tags.urls")),
+    path('users/', include("users.urls")),
+    path('main', include("main.urls")),
 ]
